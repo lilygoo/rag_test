@@ -72,7 +72,7 @@ jobs:
       - name: Deploy to App Runner
         uses: awslabs/amazon-app-runner-deploy@main
         with:
-          service: ${{ env.APP_RUNNER_ARN }}
+          service: ${{ secrets.APP_RUNNER_SERVICE_NAME }}
           image: ${{ env.IMAGE_URI }}
           region: ${{ env.AWS_REGION }}
           access-role-arn: ${{ steps.get-roles.outputs.access-role-arn }}
