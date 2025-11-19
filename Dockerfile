@@ -4,13 +4,15 @@ FROM python:3.11-slim
 # 2. 设置工作目录
 WORKDIR /app
 
-# 3. 安装依赖
+# 3. 安装依赖 (先复制 requirements.txt 以利用 Docker 层缓存)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 4. 复制所有代码和数据
-# 关键: 这一步会把 app.py, data.txt 和 faiss_index 文件夹都复制进去
-COPY . .
+# 4. 复制应用代码和 FAISS 索引
+# 关键: faiss_index 文件夹必须预先在本地通过 ingest.py 生成
+# 此步骤会将 app.py 和 faiss_index/ 文件夹都复制到镜像中
+COPY app.py .
+COPY faiss_index/ ./faiss_index/
 
 # 4.5 构建 FAISS 索引 (如果还不存在)
 # RUN python ingest.py

@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -74,5 +74,5 @@ def chat(query: Query):
         answer = chain.invoke(query.question)
         return {"answer": f"Helpful Answer: V4 {answer}"}
     except Exception as e:
-        # Return error message
-        return {"error": str(e)}, 500
+        # Return proper HTTP error response
+        raise HTTPException(status_code=500, detail=str(e))
